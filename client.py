@@ -22,6 +22,7 @@ class Client:
     def connecting(self):
         UDP_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         UDP_client.bind(('', self.udp_port))
         bytes1, ADDR = UDP_client.recvfrom(self.client_buffer_size)
 
