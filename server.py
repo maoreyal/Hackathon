@@ -5,12 +5,13 @@ import random
 import time
 import struct
 from colorama import Fore, Back
+from scapy import get_if_addr
 #import getch
 
 class Server():
     def __init__(self, destination_port = 13117,server_port = 45654) -> None:
         #server initialization
-        self.server_ip_address = socket.gethostbyname(socket.gethostname())
+        self.server_ip_address = get_if_addr('eth1')
         self.udp_port = destination_port
         self.server_buffer_size = 1024
         self.cookie = 0xabcddcba
