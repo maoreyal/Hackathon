@@ -26,7 +26,6 @@ class Client:
         UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         #print('error 2')
         UDP_client.bind(('', self.udp_port))
-        #print('error 3')
         bytes1, ADDR = UDP_client.recvfrom(self.client_buffer_size)
 
         cookie, msg_type, server_port = struct.unpack('IbH', bytes1)
