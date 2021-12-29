@@ -1,11 +1,12 @@
 import socket
 import random
-import scapy
+# import scapy
 import threading
-import sys
-import select
+# import sys
+# import select
 import keyboard
-from scapy.all import get_if_addr
+# from scapy.all import get_if_addr
+import struct
 
 class Client:
 
@@ -21,18 +22,19 @@ class Client:
     def connecting(self):
         UDP_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         UDP_client.bind(('', self.udp_port))
-        while True:
-            bytes, ADDR = UDP_client.recvfrom(self.client_buffer_size)
-            break
+        bytes1, ADDR = UDP_client.recvfrom(self.client_buffer_size)
 
-        print(f"Received offer from {ADDR[0]}, attempting to connect...")
-        TCP_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            TCP_socket.connect((socket.gethostname(), self.client_port))
-        except:
-            return None
-        return TCP_socket
+        cookie, msg_type, server_port = struct.unpack('IbH', bytes1)
+        if cookie == '0xabcddcba' and msg_type == '0x2':
+            print(f"Received offer from {ADDR[0]}, attempting to connect...")
+            TCP_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            try:
+                TCP_socket.connect((socket.gethostname(), server_port))
+            except:
+                return None
+            return TCP_socket
 
     def play_game(self):
         tcp_socket = self.connecting()
