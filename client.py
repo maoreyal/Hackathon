@@ -10,7 +10,7 @@ import struct
 
 class Client:
 
-    def init(self, destination_port=13117, client_port=4565, client_name='Dr.Stark') -> None:
+    def init(self, destination_port=12111, client_port=4565, client_name='Dr.Stark') -> None:
         # self.server_ip_address = socket.gethostbyname(socket.gethostname())
         self.udp_port = destination_port
         self.client_buffer_size = 1024
@@ -22,8 +22,11 @@ class Client:
     def connecting(self):
         UDP_client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        #print('error 1')
         UDP_client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        #print('error 2')
         UDP_client.bind(('', self.udp_port))
+        #print('error 3')
         bytes1, ADDR = UDP_client.recvfrom(self.client_buffer_size)
 
         cookie, msg_type, server_port = struct.unpack('IbH', bytes1)
@@ -45,6 +48,9 @@ class Client:
 
         answer = keyboard.read_key()
         tcp_socket.sendall(answer.encode())
+
+        print(tcp_socket.recv(self.client_buffer_size).decode('UTF-8'))
+
 
 
 
