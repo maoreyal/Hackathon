@@ -28,6 +28,7 @@ class Server():
         # server making udp brodcasting to players to join
         UDP_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         UDP_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        UDP_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         ADDR = ('',self.server_port)
         UDP_socket.bind(ADDR)
         
