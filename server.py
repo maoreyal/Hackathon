@@ -5,7 +5,7 @@ import random
 import time
 import struct
 from colorama import Fore, Back
-from scapy import get_if_addr
+from scapy.all import get_if_addr
 #import getch
 
 class Server():
@@ -28,10 +28,10 @@ class Server():
         # server making udp brodcasting to players to join
         UDP_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         UDP_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        ADDR = (self.server_ip_address,self.server_port)
+        ADDR = ('',self.server_port)
         UDP_socket.bind(ADDR)
         
-        message = struct.pack('Ibh',self.cookie,self.messagetype,self.udp_port)
+        message = struct.pack('IbH',self.cookie,self.messagetype,self.udp_port)
         
         while not(self.first_client and self.second_client):
             UDP_socket.sendto(message,('<broadcast>',self.server_port))
