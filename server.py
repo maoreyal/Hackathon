@@ -29,7 +29,7 @@ class Server():
         UDP_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         UDP_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         UDP_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-        ADDR = ('',self.server_port)
+        ADDR = (self.server_ip_address,self.server_port)
         UDP_socket.bind(ADDR)
         
         message = struct.pack('IbH',self.cookie,self.messagetype,self.udp_port)
@@ -49,7 +49,7 @@ class Server():
 
         def adding_clients_to_server(accept):
             while not(self.first_client is None and self.second_client is None):
-                client_socket, address = accept
+                client_socket, address = accept()
                 if self.first_client is None and self.second_client is None:
                     self.first_client = (client_socket, address)
 
